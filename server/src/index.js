@@ -1,5 +1,5 @@
 const app = require("./app")
-
-app.listen(3001,()=>{
-    console.log("running in 3001");
+const {PORT}=require("./config/env")
+app.listen(PORT,()=>{
+    console.log(`running in ${PORT}`);
 })
