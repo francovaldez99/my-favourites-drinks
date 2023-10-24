@@ -1,5 +1,5 @@
 const jwt=require("jsonwebtoken")
-const SECRET_KEY_JWTOKEN=require("../config/env")
+const {SECRET_KEY_JWTOKEN}=require("../config/env")
 const authMiddleware=(req,res,next)=>{
     const token = req.cookies.token;
 
@@ -11,6 +11,7 @@ const authMiddleware=(req,res,next)=>{
             res.status(401).send('Unauthorized: Invalid token');
           } else {
             req.email = decoded.email;
+            req.id=decoded.id;
             next();
           }
         });

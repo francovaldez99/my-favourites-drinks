@@ -21,7 +21,7 @@ const Register=async(req,res)=>{
             
             const newUser=await User.create({username,email,password:HashedPassword})
             
-            res.status(200).json(newUser)
+            res.status(200).json({username:newUser.username,id:newUser._id,email:newUser.email,message:"User created Succefully"})
         }
         
     } catch (error) {
@@ -45,13 +45,35 @@ const Login = async(req,res)=>{
             }
             //generamos token !!!
         const token=jwt.sign({id:findUser._id,username:findUser.username,email:findUser.email},SECRET_KEY_JWTOKEN,{expiresIn:"1d"})
-        res.cookie('token', token).json({token})
+        res.cookie('token', token).json({id:findUser._id,username:findUser.username,email:findUser.email,token})
     } catch (error) {
         console.log(error.message);
         res.status(400).json(error)
     }
 }
 
+const verifyTokenController  = async(req,res)=>{
+    const token = req.cookies.token;
+    if (!token) {
+    return  res.status(401).json({Unauthorized: "No token provided"});
+    }else {
+      jwt.verify(token, SECRET_KEY_JWTOKEN, async function(err, decoded) {
+        if (err) {
+          res.status(401).send('Unauthorized: Invalid token');
+        } else {
+          const userFound = await User.findOne({email:decoded.email})
+          if(!userFound)return  res.status(401).json({Unauthorized: "No token provided"});
+          return res.json({
+            email:userFound.email,
+            username:userFound.username
+          })
+        }
+      });
+    }
+  }
+  
+
+
 module.exports={
-    Register,Login
+    Register,Login,verifyTokenController
 }
