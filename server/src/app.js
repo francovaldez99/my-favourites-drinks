@@ -1,4 +1,4 @@
-const express=require("express")
+const express=require("express");
 const indexRouter = require("./routes/index.routes")
 const morgan = require("morgan")
 const cookieParser = require('cookie-parser')

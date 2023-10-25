@@ -45,10 +45,12 @@ export const AuthProvider = ({ children }) => {
       try {
         const cookies = await Cookies.get();
         if (!cookies.token) {
+          console.log("No TOKEN");
           setIsAuthenticated(false);
           SetUser(null);
           return;
         }
+        console.log(cookies);
         const verify = await axios.get("/user/verify-token");
     
         setIsAuthenticated(true);

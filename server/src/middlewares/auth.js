@@ -6,6 +6,7 @@ const authMiddleware=(req,res,next)=>{
     if (!token) {
         res.status(401).send('Unauthorized: No token provided');
       } else {
+        console.log(token);
         jwt.verify(token, SECRET_KEY_JWTOKEN, function(err, decoded) {
           if (err) {
             res.status(401).send('Unauthorized: Invalid token');
