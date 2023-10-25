@@ -4,14 +4,15 @@ const morgan = require("morgan")
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser');
 const connectdb = require("./config/db")
-const cors=require("cors")
+const cors=require("cors");
+const { CLIENT_URL } = require("./config/env");
 const app = express()
 
 
 app.use(express.json())
 app.use(cors({
     credentials: true,
-    origin: "http://localhost:5173",
+    origin: CLIENT_URL,
   }))
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(morgan("dev"))
