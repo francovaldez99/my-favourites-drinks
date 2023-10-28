@@ -9,18 +9,17 @@ const { CLIENT_URL } = require("./config/env");
 const app = express()
 
 console.log(CLIENT_URL);
+app.use(morgan("dev"))
+
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json())
 app.use(cors({
     credentials: true,
     origin: CLIENT_URL,
   }))
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(morgan("dev"))
 
 app.use(cookieParser())
-app.get("/start",(req,res)=>{
-  res.status(200).send("<h1>hola esta funcionando</h1>")
-})
+
 app.use(indexRouter)
 
  connectdb()
