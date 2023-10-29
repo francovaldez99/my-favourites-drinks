@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json())
 app.use(cors({
     credentials: true,
-
+    origin: CLIENT_URL,
   }))
 
 app.use(cookieParser())
