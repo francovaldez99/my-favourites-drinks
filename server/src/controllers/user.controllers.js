@@ -46,8 +46,8 @@ const Login = async(req,res)=>{
             //generamos token !!!
         const token=jwt.sign({id:findUser._id,username:findUser.username,email:findUser.email},SECRET_KEY_JWTOKEN,{expiresIn:"1d"})
         res.cookie('token', token,{
-            domain: 'https://my-favourites-drinks.onrender.com', // Dominio de la página
-    
+            domain: 'my-favourites-drinks.onrender.com', // Dominio de la página
+ path:"/login"
           }).json({id:findUser._id,username:findUser.username,email:findUser.email,token})
     } catch (error) {
         console.log(error.message);
