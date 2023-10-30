@@ -10,15 +10,16 @@ const app = express()
 
 console.log(CLIENT_URL);
 app.use(morgan("dev"))
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Credentials', 'true');
+const corsOptions = {
+  origin: 'https://my-favourites-drinks.onrender.com',
+  credentials: true
+};
 
-  next();
-})
-app.use(cors({
-  credentials: true,
-  origin: CLIENT_URL,
-}))
+app.use(cors(corsOptions));
+// app.use(cors({
+//   credentials: true,
+//   origin: CLIENT_URL,
+// }))
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json())
 
