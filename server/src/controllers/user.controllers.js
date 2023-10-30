@@ -46,7 +46,8 @@ const Login = async(req,res)=>{
             //generamos token !!!
         const token=jwt.sign({id:findUser._id,username:findUser.username,email:findUser.email},SECRET_KEY_JWTOKEN,{expiresIn:"1d"})
         res.cookie('token', token,{
-            sameSite:"None"
+            sameSite:"None",
+            secure:true
         }).json({id:findUser._id,username:findUser.username,email:findUser.email,token})
     } catch (error) {
         console.log(error.message);
