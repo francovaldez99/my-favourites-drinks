@@ -10,16 +10,11 @@ const app = express()
 
 console.log(CLIENT_URL);
 app.use(morgan("dev"))
-const corsOptions = {
-  origin: 'https://my-favourites-drinks.onrender.com',
-  credentials: true
-};
 
-app.use(cors(corsOptions));
-// app.use(cors({
-//   credentials: true,
-//   origin: CLIENT_URL,
-// }))
+app.use(cors({
+  credentials: true,
+  origin: CLIENT_URL,
+}))
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json())
 

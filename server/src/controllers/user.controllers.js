@@ -1,7 +1,7 @@
 const User=require("../models/user.model")
 const bcrypt=require("bcrypt")
 const jwt=require("jsonwebtoken");
-const { SECRET_KEY_JWTOKEN, CLIENT_URL } = require("../config/env");
+const { SECRET_KEY_JWTOKEN, CLIENT_URL, NODE_ENV } = require("../config/env");
 const Register=async(req,res)=>{
 
     try {
@@ -45,10 +45,16 @@ const Login = async(req,res)=>{
             }
             //generamos token !!!
         const token=jwt.sign({id:findUser._id,username:findUser.username,email:findUser.email},SECRET_KEY_JWTOKEN,{expiresIn:"1d"})
-        res.cookie('token', token,{
-            sameSite:"None",
-            secure:true
-        }).json({id:findUser._id,username:findUser.username,email:findUser.email,token})
+        
+        if (NODE_ENV==="production") {
+            
+            res.cookie('token', token,{
+                sameSite:"None",
+                secure:true
+            }).json({id:findUser._id,username:findUser.username,email:findUser.email,token})
+        }else{
+            res.cookie('token', token).json({id:findUser._id,username:findUser.username,email:findUser.email,token})
+        }
     } catch (error) {
         console.log(error.message);
         res.status(400).json(error)
