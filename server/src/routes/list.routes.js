@@ -1,5 +1,6 @@
 const {Router}=require("express");
-const { getAllList, getAllFav, newFav, deleteFav } = require("../controllers/list.controllers");
+const {  getAllFav, newFav, deleteFav } = require("../controllers/fav.controllers");
+const {getAllList}=require("../controllers/list.controllers")
 
 const listRouter=Router()
 listRouter.get("/get-allfav",getAllFav)
