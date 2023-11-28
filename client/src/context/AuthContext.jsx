@@ -46,19 +46,19 @@ export const AuthProvider = ({ children }) => {
         const cookies = await Cookies.get();
         console.log(cookies);
         if (!cookies.token) {
-          console.log("No TOKEN");
+
           setIsAuthenticated(false);
           SetUser(null);
           return;
         }
- 
+     
         const verify = await axios.get("/user/verify-token");
     
         setIsAuthenticated(true);
         SetUser(verify.data);
       } catch (error) {
-        console.log(error);
-        setIsAuthenticated(false);
+        
+   setIsAuthenticated(false);
         SetUser(null);
         navigate("/login");
       }
