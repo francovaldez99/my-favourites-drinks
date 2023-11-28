@@ -26,7 +26,7 @@ setForm({
   password:""
 })
 setIsAuthenticated(true)
-console.log(res);
+
 SetUser({
   email:res.data.email,
   username:res.data.username

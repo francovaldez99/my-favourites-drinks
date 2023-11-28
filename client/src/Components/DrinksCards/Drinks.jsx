@@ -17,8 +17,8 @@ function Drinks() {
     <div
       style={{
         display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))",
-        gap: "20px",
+        gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+        gap: "5px",
         paddingTop: "20px",
         margin: "0 auto",
       }}

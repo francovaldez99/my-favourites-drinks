@@ -9,6 +9,8 @@ import { AuthProvider } from "./context/AuthContext";
 import Notification from "./Components/Notification/Notificaction";
 import Profile from "./Components/Profile/Profile";
 import ProtectedRoute from "./Components/protectedRoute/ProtectedRoute";
+import CollectionFav from "./Components/Profile/CollectionFav";
+import CollectionList from "./Components/Profile/CollectionList";
 
 function App() {
 
@@ -25,6 +27,8 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route element={<ProtectedRoute />}>
             <Route path="/profile" element={<Profile />} />
+            <Route path="/profile/fav" element={<CollectionFav />} />
+            <Route path="/profile/collection/:idlist" element={<CollectionList/>}/>
           </Route>
         </Routes>
       </DrinksProvider>

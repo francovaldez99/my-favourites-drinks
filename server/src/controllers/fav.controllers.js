@@ -35,13 +35,11 @@ const deleteFav=async(req,res)=>{
         const updatedList = allFAv.list.filter((el) => el.idDrink !== idDrink);
 
      let fav=  await Fav.findOneAndUpdate(
-          { author: authorId, name: "Favourites" },
+          { author: authorId},
           { list: updatedList },
           { new: true } 
         );
-        // console.log(idDrink);
-        // console.log(updatedList);
-        // console.log(fav);
+      
             res.status(200).json(fav)
     } catch (error) {
         res.status(400).json({errMessage:"Internal server error",...error})
