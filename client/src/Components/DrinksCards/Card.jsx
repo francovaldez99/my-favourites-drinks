@@ -1,16 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useDrinks } from "../../context/DrinkContext";
 import { deleteFav, newFav } from "../../api/list";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { BsFolderPlus, BsFolderCheck } from "react-icons/bs";
+import Modal from "../Model/Modal";
+import FormList from "./FormList";
 
 function Card({ drink }) {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
-  const {  favlist, setFavList } = useDrinks();
-  const { isLoading } = useDrinks();
+  const { favlist, setFavList, isLoading,isInOneList } = useDrinks();
+  const [ModalIsOpen, SetModalIsOpen] = useState(false);
+
   const handleToggleFavorite = (drink) => {
-    console.log(drink);
     if (!isAuthenticated) {
       navigate("/login");
       return;
@@ -23,17 +27,14 @@ function Card({ drink }) {
         .catch((err) => {
           console.log(err);
         });
-    }else{
-       
-        deleteFav(drink.idDrink)
-        .then((res)=>{
-            console.log(res);
+    } else {
+      deleteFav(drink.idDrink)
+        .then((res) => {
           setFavList(res.data.list);
-
         })
-        .catch((err)=>{
-            console.log(err);
-        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   };
 
@@ -44,34 +45,44 @@ function Card({ drink }) {
       </div>
     );
   }
+
   return (
-    <div key={drink.idDrink} className="cursor-pointer rounded m-4">
+    <div key={drink.idDrink} className="cursor-pointer rounded m-4 ">
+      <div className="relative flex w-full   justify-between items-center top-[50px] text-xl px-2">
+        <button
+          onClick={() => handleToggleFavorite(drink)}
+          className={`mt-2 p-2  rounded-full bg-white border-white   ${
+            favlist.some((el) => el.idDrink === drink.idDrink)
+              ? "text-red-500"
+              : "text-gray-500"
+          }`}
+        >
+          {favlist.some((el) => el.idDrink === drink.idDrink) ? (
+            <FaHeart />
+          ) : (
+            <FaRegHeart />
+          )}
+        </button>
+        <button
+          className={`mt-2 p-2 bg-white rounded-full text-gray`}
+          onClick={() => isAuthenticated && SetModalIsOpen(true)}
+        >
+          {isInOneList(drink.idDrink) ? <BsFolderCheck /> : <BsFolderPlus />}
+        </button>
+      </div>
       <img
         src={drink.strDrinkThumb}
         alt={`${drink.idDrink}+${drink.strDrink}`}
-        width="300px"
         onClick={() => navigate(`/detail/${drink.idDrink}`)}
         loading="lazy"
         className="rounded"
       />
-
-      <h4 className="text-teal-500 hover:text-teal-700 text-sm text-center">
+      <h4 className="text-slate-500 hover:text-slate-800  text-center font-bold">
         {drink.strDrink}
       </h4>
-
-      {/* Botón de favoritos */}
-      <button
-        onClick={() => handleToggleFavorite(drink)}
-        className={`mt-2 px-4 py-2 rounded text-white ${
-          favlist.some((el) => el.idDrink === drink.idDrink)
-            ? "bg-red-500"
-            : "bg-gray-500"
-        }`}
-      >
-        {favlist.some((el) => el.idDrink === drink.idDrink)
-          ? "Favorito"
-          : "Agregar a Favoritos"}
-      </button>
+      <Modal isOpen={ModalIsOpen} setIsOpen={SetModalIsOpen}>
+        <FormList drink={drink}/>
+      </Modal>
     </div>
   );
 }

@@ -5,7 +5,7 @@ import {
   GetListOfIngredients,
   ListDrinksOption,
 } from "../api/drinks";
-import { getAllFav } from "../api/list";
+import { deleteFav, getAllFav, getAllList } from "../api/list";
 import { useAuth } from "./AuthContext";
 const context = createContext();
 
@@ -15,6 +15,7 @@ export const DrinksProvider = ({ children }) => {
   const [categories, setCategories] = useState([]);
   const [glasses, setGlasses] = useState([]);
   const [ingredients, setIngredients] = useState([]);
+
   const [drinkDetail, setDrinkDetail] = useState({});
   const alcoholic = [
     { strAlcoholic: "Alcoholic" },
@@ -24,6 +25,7 @@ export const DrinksProvider = ({ children }) => {
 
   const [drinks, setDrinks] = useState([]);
 const [favlist,setFavList]=useState([])
+const [allList,setAllList]=useState([])
   const [options, setOptions] = useState({
     filter: {
       category: "",
@@ -105,9 +107,13 @@ const [favlist,setFavList]=useState([])
           if(isAuthenticated){
             const myFav = await getAllFav()
             setFavList(myFav.data[0].list)
-           
+           const allmyList =await getAllList()
+      
+           setAllList(allmyList.data)
+          
           }else{
             setFavList([])
+            setAllList([])
           }
 
         } else {
@@ -133,6 +139,21 @@ const [favlist,setFavList]=useState([])
       });
   }, []);
 
+  const removeFromFavorites=(drinkId)=>{
+    deleteFav(drinkId).
+    then((res)=>{
+      setFavList(res.data.list)
+
+    })
+    .catch((err)=>{
+      console.log(err);
+    })
+  }
+
+
+  const isInOneList=(drinkId)=>{
+    return allList.find((el)=>(el.list.some((el)=>el.idDrink===drinkId)))
+  }
   return (
     <context.Provider
       value={{
@@ -147,7 +168,11 @@ const [favlist,setFavList]=useState([])
         isLoading,
         setDrinks,
         favlist,
-        setFavList
+        setFavList,
+        removeFromFavorites,
+        allList,
+        setAllList,
+        isInOneList
       }}
     >
       {children}

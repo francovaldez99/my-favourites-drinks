@@ -30,8 +30,10 @@ const onSubmit=(event)=>{
   register(form)
   .then((res)=>{handleShowSuccessToast(res.data.message)
   })
-  .catch((err)=>{handleShowErrorToast(err.response.data.errMessage)
-  console.log(err)})
+  .catch((err)=>{
+    handleShowErrorToast(err.response.data.errMessage)
+  console.log(err)
+})
   
 }
 useEffect(() => {

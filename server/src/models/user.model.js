@@ -1,11 +1,12 @@
 const mongoose = require('mongoose'); 
-const List =require("./list.model")
+const List =require("./list.model");
+const Fav = require('./fav.model');
 var userSchema = new mongoose.Schema({
     username:{
         type:String,
         required:true,
         unique:true,
-        index:true,
+     
     },
     email:{
         type:String,
@@ -20,11 +21,8 @@ var userSchema = new mongoose.Schema({
 });
 userSchema.pre("save", function (next) {
 
+    const favoritesList = new Fav({ author: this._id, list: [] });
   
-    // Crea una nueva lista vacía
-    const favoritesList = new List({ name: "Favourites", author: this._id, list: [] });
-  
-    // Guarda la lista en la base de datos
     favoritesList.save()
       .then(() => {
         next();
