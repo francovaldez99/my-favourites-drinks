@@ -105,6 +105,7 @@ const [allList,setAllList]=useState([])
           setDrinks(result)
 
           if(isAuthenticated){
+           
             const myFav = await getAllFav()
             setFavList(myFav.data[0].list)
            const allmyList =await getAllList()

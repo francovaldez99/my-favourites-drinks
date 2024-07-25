@@ -5,7 +5,7 @@ const List=require("../models/list.model");
 
 const getAllList=async(req,res)=>{
     try {
-        const authorId=req.id;
+        const authorId=req.user.id;
         const allList=await List.find({author:authorId})
             res.status(200).json(allList)
     } catch (error) {
@@ -16,7 +16,7 @@ const getAllList=async(req,res)=>{
 //new List
 const newList=async(req,res)=>{
 try {
-    const authorId=req.id;
+    const authorId=req.user.id;
     const nameList=req.body.name
     const listExist= await List.findOne({
         author:authorId,
@@ -47,16 +47,22 @@ try {
 
 const newListItem=async(req,res)=>{
     try {
-        const authorId=req.id;
+        const authorId=req.user.id;
+
         const {idlist}=req.params
+       
         const {newItem}=req.body
+        
         const listtoupdate= await List.findOne({author:authorId,_id:idlist})
+        console.log("🚀 ~ newListItem ~ listtoupdate:", listtoupdate)
     
         listtoupdate.list.push(newItem)
             await listtoupdate.save()
+            
             const allList=await List.find({author:authorId})
             res.status(200).json(allList)
     } catch (error) {
+        console.log("🚀 ~ newListItem ~ error:", error)
         res.status(400).json({errMessage:"Internal server error",...error})
         
     }
@@ -64,7 +70,7 @@ const newListItem=async(req,res)=>{
 
 const deleteItemList=async(req,res)=>{
     try {
-        const authorId=req.id;
+        const authorId=req.user.id;
 
         const {idlist}=req.params;
         const {idDrink}=req.body
@@ -76,7 +82,7 @@ console.log(updatedList);
           { list: updatedList }
         );
         await newlistupdated.save()
-        // console.log(newlistupdated);
+
 
         const allList=await List.find({author:authorId})
         console.log(allList);
@@ -90,7 +96,7 @@ console.log(updatedList);
 const deleteList=async(req,res)=>{
         const {idList}=req.params
     try {
-        const authorId=req.id;
+        const authorId=req.user.id;
         const listtoDelete= await List.findByIdAndRemove({ author:authorId,_id:idList },{new:true})
         const allList=await List.find({author:authorId})
         res.status(200).json(allList)

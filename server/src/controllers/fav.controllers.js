@@ -2,7 +2,8 @@ const Fav=require("../models/fav.model");
 
 const getAllFav=async(req,res)=>{
     try {
-        const authorId=req.id;
+        console.log(req.user);
+        const authorId=req.user.id;
         
         const allFAv= await Fav.find({author:authorId})
         res.status(200).json(allFAv)
@@ -14,14 +15,17 @@ const getAllFav=async(req,res)=>{
 
 const newFav=async(req,res)=>{
     try {
-        const authorId=req.id;
+        const authorId=req.user.id;
         const {newItem}=req.body
+        console.log("🚀 ~ newFav ~ newItem:", newItem)
+        
         const allFav= await Fav.findOne({author:authorId})
     
         allFav.list.push(newItem)
             await allFav.save()
             res.status(200).json(allFav)
     } catch (error) {
+        console.log(error);
         res.status(400).json({errMessage:"Internal server error",...error})
         
     }
@@ -29,7 +33,7 @@ const newFav=async(req,res)=>{
 
 const deleteFav=async(req,res)=>{
     try {
-        const authorId=req.id;
+        const authorId=req.user.id;
         const {idDrink}=req.body;
         const allFAv= await Fav.findOne({author:authorId})
         const updatedList = allFAv.list.filter((el) => el.idDrink !== idDrink);

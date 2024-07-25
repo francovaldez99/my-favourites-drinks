@@ -43,16 +43,14 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const checkLogin = async () => {
       try {
-        const cookies = await Cookies.get();
-        console.log(cookies);
-        if (!cookies.token) {
+        const tokenFromLocalStorage = localStorage.getItem("token")
 
-          setIsAuthenticated(false);
-          SetUser(null);
-          return;
-        }
      
-        const verify = await axios.get("/user/verify-token");
+        const verify = await axios.get("/user/verify-token",{
+          headers:{
+            Authorization:`Bearer ${tokenFromLocalStorage}`
+          }
+        });
     
         setIsAuthenticated(true);
         SetUser(verify.data);
@@ -66,7 +64,7 @@ export const AuthProvider = ({ children }) => {
     checkLogin();
   }, []);
   const logout = () => {
-    Cookies.remove("token");
+    localStorage.removeItem("token")
     SetUser(null);
     setIsAuthenticated(false);
   };

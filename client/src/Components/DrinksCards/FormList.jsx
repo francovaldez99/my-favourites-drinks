@@ -8,13 +8,17 @@ import { FaRegBookmark } from 'react-icons/fa';
 
 function FormList({drink}) {
     const {allList,isInOneList,setAllList}=useDrinks();
-    const {handleShowWarningToast,handleShowErrorToast,handleShowSuccessToast}=useAuth()
+    const {handleShowWarningToast,handleShowErrorToast,handleShowSuccessToast,isAuthenticated}=useAuth()
   const handleInputChange=(event)=>{
     const {id,name}=event.target
-console.log(id,name);
-    console.log(!allList.find((el)=>el.name===name).list.some((item)=>item.idDrink===drink.idDrink));
+    if (!isAuthenticated) {
+      navigate("/login");
+      return;
+    }
+// console.log(id,name);
+//     console.log(!allList.find((el)=>el.name===name).list.some((item)=>item.idDrink===drink.idDrink));
     if(!allList.find((el)=>el.name===name).list.some((item)=>item.idDrink===drink.idDrink)){
-    console.log("por aca pasa if");
+    // console.log("por aca pasa if");
 
       newItemInList(drink,id)
       .then((res)=>{
@@ -26,7 +30,7 @@ console.log(id,name);
         handleShowErrorToast("Algo salio mal ")
       })
     }else{
-    console.log("por aca pasa else ");
+    // console.log("por aca pasa else ");
 
       removeItemFromList(drink,id)
       .then((res)=>{

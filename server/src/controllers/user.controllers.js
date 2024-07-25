@@ -32,29 +32,19 @@ const Register=async(req,res)=>{
 
 const Login = async(req,res)=>{
     try {
-        const {email,password}=req.body;
-        const findUser= await User.findOne({email})
-        if(!findUser){
-            return res.status(401).json({errMessage:"User not found"})
-        }
-        
-            const passwordMatch = bcrypt.compareSync(password,findUser.password)
-            if(!passwordMatch){
-                return res.status(400).json({errMessage:"Email or Password incorrect"})
+      let payload = {
+        username : req.user.username,
+        id:req.user.id
+      }
+       const token = await jwt.sign(payload,process.env.SECRET_KEY_JWTOKEN)
 
-            }
-            //generamos token !!!
-        const token=jwt.sign({id:findUser._id,username:findUser.username,email:findUser.email},SECRET_KEY_JWTOKEN,{expiresIn:"1d"})
-        
-        if (NODE_ENV==="production") {
-            
-            res.cookie('token', token,{
-                sameSite:"None",
-                secure:true
-            }).json({id:findUser._id,username:findUser.username,email:findUser.email,token})
-        }else{
-            res.cookie('token', token).json({id:findUser._id,username:findUser.username,email:findUser.email,token})
+       return res.status(200).json(
+        {
+          ...req.user,
+          token
         }
+       )
+      
     } catch (error) {
         console.log(error.message);
         res.status(400).json(error)
@@ -62,22 +52,13 @@ const Login = async(req,res)=>{
 }
 
 const verifyTokenController  = async(req,res)=>{
-    const token = req.cookies.token;
-    if (!token) {
-    return  res.status(401).json({Unauthorized: "No token provided"});
-    }else {
-      jwt.verify(token, SECRET_KEY_JWTOKEN, async function(err, decoded) {
-        if (err) {
-          res.status(401).send('Unauthorized: Invalid token');
-        } else {
-          const userFound = await User.findOne({email:decoded.email})
-          if(!userFound)return  res.status(401).json({Unauthorized: "No token provided"});
-          return res.json({
-            email:userFound.email,
-            username:userFound.username
-          })
-        }
-      });
+    try {
+      res.status(200).json(
+        {
+          email:req.user.email,username:req.user.username }
+      )
+    } catch (error) {
+      res.status(401)
     }
   }
   
