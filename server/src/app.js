@@ -5,11 +5,9 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const connectdb = require("./config/db");
 const cors = require("cors");
-const session = require("express-session");
 const { CLIENT_URL } = require("./config/env");
 const passport = require("passport");
 const {localPassportStrategy,JwtpassportStrategy} = require("./config/passport");
-const mongoStore = require("connect-mongo")
 const User=require("./models/user.model")
 const app = express();
 

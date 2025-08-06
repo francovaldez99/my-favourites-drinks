@@ -19,21 +19,7 @@ const JwtpassportStrategy = new JwtStrategy(opts, (jwt_payload, done) => {
   //     iat: 1721615805
     
   // }
-  User.findById(jwt_payload.id)
-  .then((user)=>{
-   
-      if(!user){
-          return done(null, false)
-      }else{
-         
-          return done(null, {email:user.email, id:user._id,username:user.username});
-      }
-      
-  })
-  .catch((err)=>{
-  
-      return done(err);
-  })
+
   })
 
 ;
